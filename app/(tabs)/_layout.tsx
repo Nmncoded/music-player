@@ -1,9 +1,11 @@
 import { colors, fontSize } from '@/constants/tokens'
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-// import { BlurView } from 'expo-blur'
+import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
+import { StyleSheet } from 'react-native'
 
 const TabsNavigation = () => {
+	console.log(StyleSheet.absoluteFillObject)
 	return (
 		<>
 			<Tabs
@@ -21,17 +23,17 @@ const TabsNavigation = () => {
 						borderTopWidth: 0,
 						paddingTop: 8,
 					},
-					// tabBarBackground: () => (
-					// 	<BlurView
-					// 		intensity={95}
-					// 		style={{
-					// 			...StyleSheet.absoluteFillObject,
-					// 			overflow: 'hidden',
-					// 			borderTopLeftRadius: 20,
-					// 			borderTopRightRadius: 20,
-					// 		}}
-					// 	/>
-					// ),
+					tabBarBackground: () => (
+						<BlurView
+							intensity={70}
+							style={{
+								...StyleSheet.absoluteFillObject,
+								overflow: 'hidden',
+								borderTopLeftRadius: 20,
+								borderTopRightRadius: 20,
+							}}
+						/>
+					),
 				}}
 			>
 				<Tabs.Screen
