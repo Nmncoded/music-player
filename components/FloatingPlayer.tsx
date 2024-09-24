@@ -1,11 +1,16 @@
-import { PlayPauseButton, SkipToNextButton } from '@/components/PlayerControls'
+import {
+	PlayPauseButton,
+	SkipToNextButton,
+	SkipToPreviousButton,
+} from '@/components/PlayerControls'
 import { unknownTrackImageUri } from '@/constants/images'
+
 import { useLastActiveTrack } from '@/hooks/useLastActiveTrack'
 import { defaultStyles } from '@/styles'
 import { useRouter } from 'expo-router'
-import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native'
-import FastImage from 'react-native-fast-image'
+import { Image, StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
 import { useActiveTrack } from 'react-native-track-player'
+import { MovingText } from './MovingText'
 
 export const FloatingPlayer = ({ style }: ViewProps) => {
 	const router = useRouter()
@@ -13,10 +18,9 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 	const activeTrack = useActiveTrack()
 	const lastActiveTrack = useLastActiveTrack()
 
-	const displayedTrack = activeTrack ?? {
-		title: 'This is just a song',
-		artwork: '',
-	}
+	const displayedTrack = activeTrack ?? lastActiveTrack
+
+	console.log(unknownTrackImageUri)
 
 	// const handlePress = () => {
 	// 	router.navigate('/player')
@@ -31,7 +35,7 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 			style={[styles.container, style]}
 		>
 			<>
-				<FastImage
+				<Image
 					source={{
 						uri: displayedTrack.artwork ?? unknownTrackImageUri,
 					}}
@@ -39,15 +43,15 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 				/>
 
 				<View style={styles.trackTitleContainer}>
-					{/* <MovingText
+					<MovingText
 						style={styles.trackTitle}
 						text={displayedTrack.title ?? ''}
 						animationThreshold={25}
-					/> */}
-					<Text style={styles.trackTitle}>{displayedTrack?.title || ''}</Text>
+					/>
 				</View>
 
 				<View style={styles.trackControlsContainer}>
+					<SkipToPreviousButton iconSize={22} />
 					<PlayPauseButton iconSize={24} />
 					<SkipToNextButton iconSize={22} />
 				</View>
