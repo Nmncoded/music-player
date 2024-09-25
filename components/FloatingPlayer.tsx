@@ -22,18 +22,14 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 
 	console.log(unknownTrackImageUri)
 
-	// const handlePress = () => {
-	// 	router.navigate('/player')
-	// }
+	const handlePress = () => {
+		router.navigate('/player')
+	}
 
 	if (!displayedTrack) return null
 
 	return (
-		<TouchableOpacity
-			// onPress={handlePress}
-			activeOpacity={0.9}
-			style={[styles.container, style]}
-		>
+		<TouchableOpacity onPress={handlePress} activeOpacity={0.9} style={[styles.container, style]}>
 			<>
 				<Image
 					source={{
