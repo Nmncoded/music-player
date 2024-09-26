@@ -1,6 +1,7 @@
 import library from '@/assets/data/library.json'
 import { unknownTrackImageUri } from '@/constants/images'
 import { Artist, Playlist, TrackWithPlaylist } from '@/helpers/types'
+import { useMemo } from 'react'
 import { Track } from 'react-native-track-player'
 import { create } from 'zustand'
 
@@ -52,44 +53,48 @@ export const useFavorites = () => {
 	}
 }
 
-export const useArtists = () =>
-	useLibraryStore((state) => {
-		return state.tracks.reduce((acc, track) => {
+export const useArtists = () => {
+	const tracks = useLibraryStore((state) => state.tracks)
+
+	const artists = useMemo(() => {
+		return tracks.reduce((acc, track) => {
 			const existingArtist = acc.find((artist) => artist.name === track.artist)
 
 			if (existingArtist) {
 				existingArtist.tracks.push(track)
 			} else {
 				acc.push({
-					name: track.artist ?? 'Unknown',
+					name: track.artist || 'Unknown',
 					tracks: [track],
 				})
 			}
 
 			return acc
 		}, [] as Artist[])
-	})
+	}, [tracks])
+
+	return artists
+}
 
 export const usePlaylists = () => {
-	const playlists = useLibraryStore((state) => {
-		return state.tracks.reduce((acc, track) => {
-			track.playlist?.forEach((playlistName) => {
-				const existingPlaylist = acc.find((playlist) => playlist.name === playlistName)
+	const tracks = useLibraryStore((state) => state.tracks)
+	const playlists = tracks.reduce((acc, track) => {
+		track.playlist?.forEach((playlistName) => {
+			const existingPlaylist = acc.find((playlist) => playlist.name === playlistName)
 
-				if (existingPlaylist) {
-					existingPlaylist.tracks.push(track)
-				} else {
-					acc.push({
-						name: playlistName,
-						tracks: [track],
-						artworkPreview: track.artwork ?? unknownTrackImageUri,
-					})
-				}
-			})
+			if (existingPlaylist) {
+				existingPlaylist.tracks.push(track)
+			} else {
+				acc.push({
+					name: playlistName,
+					tracks: [track],
+					artworkPreview: track.artwork ?? unknownTrackImageUri,
+				})
+			}
+		})
 
-			return acc
-		}, [] as Playlist[])
-	})
+		return acc
+	}, [] as Playlist[])
 
 	const addToPlaylist = useLibraryStore((state) => state.addToPlaylist)
 
